@@ -86,6 +86,15 @@ newGameButton.addEventListener('click', () => {
     gameInstance = game(playerOne, playerTwo);
     // Den Spielstatus in dem UI aktualisieren
     document.querySelector('#messageContainer p').textContent = `Your turn ${gameInstance.nameOfCurrentPlayer()}`;
+    // Den "New Game"-Button verstecken und den Reset-Button wieder anzeigen
+    board.appendChild(resetButton);
+    resetButton.style.display = "block";
+    newGameButton.style.display = 'none';
+    // drop win message
+    const winMessageElement = document.querySelector('#messageContainer h2');
+    if (winMessageElement) {
+        winMessageElement.remove();
+    }
     // Jede Zelle leeren
     cells.forEach(cell => {
         cell.textContent = "";
@@ -94,14 +103,6 @@ newGameButton.addEventListener('click', () => {
     cells.forEach(cell => {
         cell.addEventListener('click', cellClickHandler);
     });
-    // Den "New Game"-Button verstecken und den Reset-Button wieder anzeigen
-    newGameButton.style.display = 'none';
-    resetButton.style.display = 'block';
-    // drop win message
-    if(winMessage) {
-        document.body.removeChild(winMessage);
-        winMessage = null;
-    }
 });
 
 

@@ -7,6 +7,7 @@
 body {
     font-family: Monospaced, sans-serif;
     background-color: #f2f2f2;
+    font-size: 1.5rem;
 }
 
 
@@ -17,6 +18,8 @@ button {
     border: none;
     border-radius: 5px;
     cursor: pointer;
+    font-size: 1.125rem;
+    font-weight: bold;
 }
 
 button:hover {
@@ -37,6 +40,7 @@ main {
 
 h1 {
     margin: 150px 50px 80px 50px;
+    font-size: 1.75rem;
 }
 
 form {
@@ -48,24 +52,45 @@ form {
     margin-bottom: 50px;
 }
 
+input {
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    padding: 10px;
+    font-size: 1.5rem;
+}
+
 #board {
     display: none;
     flex-wrap: wrap;
     justify-content: center;
-    gap: 20px;
     width: 220px;
+    margin-top: 30px;
 }
 
 .cell {
-    border: 1px black solid;
-    height: 50px;
-    width: 50px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-bottom: 1px black solid;
+    border-right: 1px black solid;
+    height: 70px;
+    width: 70px;
+    font-size: 2rem;
 }
 
 .cell:hover {
     cursor: pointer;
     background-color: lightskyblue;
 }
+
+.cell.outer {
+    border-right: none;
+}
+
+.cell.bottom {
+    border-bottom: none;
+}
+
 
 #resetButton {
     display: none;

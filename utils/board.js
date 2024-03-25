@@ -6,18 +6,16 @@ const board = () => ({
   ],
   // Method to put a value inside board
   setValue(row, col, value) {
+    console.log(`Versuch, Wert zu setzen: ${value} bei [${row}, ${col}]`);
     if (this.board[row] && this.board[row][col] === null) {
       this.board[row][col] = value;
+      console.log("Wert erfolgreich gesetzt.");
       return true;
+    } else {
+      console.log("Wert konnte nicht gesetzt werden.");
+      return false;
     }
-    return false;
-  },
-  // Method to print board
-  printBoard() {
-    this.board.forEach((row) => {
-      console.log(row.map((cell) => (cell === null ? '_' : cell)).join(' | '));
-    });
-  },
+  }
 });
 
 export { board };

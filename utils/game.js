@@ -6,20 +6,29 @@ function game(playerName1, playerName2) {
   const player1 = { ...player(playerName1), symbol: 'X' };
   const player2 = { ...player(playerName2), symbol: 'O' };
   let currentPlayer = player1;
+  console.log(currentPlayer.getName())
+
+  function nameOfCurrentPlayer() {
+    return currentPlayer.getName();
+  }
+
+  function symbolOfCurrentPlayer() {
+    return currentPlayer.symbol;
+  }
 
   function makeMove(row, col) {
     if (myBoard.setValue(row, col, currentPlayer.symbol)) {
+      const symbolUsed = currentPlayer.symbol;
       if (checkForWin()) {
-        console.log(`${currentPlayer.name} wins!`);
         currentPlayer.updateScore();
-        console.log(`${currentPlayer.name} has a score value of ${currentPlayer.getScore()}`)
-        return true;
+        console.log(`${currentPlayer.getName()} wins!`)
+        return symbolUsed;
       }
       currentPlayer = currentPlayer === player1 ? player2 : player1;
+      return symbolUsed;
     } else {
       throw new Error('Invalid move')
     }
-    return false;
   }
 
   function checkForWin() {
@@ -50,10 +59,14 @@ function game(playerName1, playerName2) {
     return false;
   }
 
+
   return {
     printBoard: () => myBoard.printBoard(),
-    players: [player1, player2],
+    currentPlayer,
+    nameOfCurrentPlayer,
+    symbolOfCurrentPlayer,
     makeMove,
+    checkForWin,
   };
 }
 

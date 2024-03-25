@@ -1,10 +1,10 @@
 function player(name) {
   let score = 0;
-  const active = false;
+  const getName = () => name;
   const getScore = () => score;
   const updateScore = () => score += 1;
 
-  return { name, getScore, updateScore };
+  return { getName, getScore, updateScore };
 }
 
 export { player };

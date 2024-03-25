@@ -1,4 +1,17 @@
 import { game } from "./utils/game.js";
+import { handleCellClick } from "./utils/handleCellClick.js";
+
+
+// function for removing eventlistener
+function removeCellClickHandler(cells) {
+    cells.forEach(cell => {
+        cell.removeEventListener('click', cellClickHandler);
+    })
+}
+// cellClickHandler
+function cellClickHandler(event) {
+    handleCellClick(cells, gameInstance, winMessage, resetButton, newGameButton, removeCellClickHandler, event);
+}
 
 //input
 const form = document.querySelector('form');
@@ -15,6 +28,7 @@ const board = document.querySelector('#board')
 const cells = document.querySelectorAll('.cell');
 
 let gameInstance = null;
+let winMessage = null;
 
 startButton.addEventListener('click', (event) => {
     event.preventDefault(); // Prevents the form from submitting
@@ -36,36 +50,17 @@ startButton.addEventListener('click', (event) => {
         roundMessage.textContent = `Your turn ${gameInstance.nameOfCurrentPlayer()}`
         messageContainer.appendChild(roundMessage);
 
+        // add event-listener for cells
+        cells.forEach(cell => {
+            cell.addEventListener('click', cellClickHandler);
+        });
+
 
     } else {
         alert("Please enter both player names");
     }
 })
 
-cells.forEach((cell, index) => {
-    cell.addEventListener('click', () => {
-        const row = Math.floor(index / 3);
-        const col = index % 3;
-        try {
-            const symbolUsed = gameInstance.makeMove(row, col); // Speichern des Rückgabewerts
-            cell.textContent = symbolUsed; // Verwendung des Symbols für die UI-Aktualisierung
-            document.querySelector('#messageContainer p').textContent = `Your turn ${gameInstance.nameOfCurrentPlayer()}`;
-            if (gameInstance.checkForWin()) {
-                const winMessage = document.createElement('h2');
-                winMessage.textContent = `${gameInstance.nameOfCurrentPlayer()} wins!`;
-                messageContainer.appendChild(winMessage);
-                messageContainer.querySelector('#messageContainer p').textContent = "";
-                // remove event-listener from cells
-                cells.forEach(cell => {
-                    cell.removeEventListener('click', makeMove);
-                })
-            }
-        } catch (error) {
-            console.error(error.message);
-            // Fehlerbehandlung...
-        }
-    });
-});
 
 resetButton.addEventListener('click', () => {
     board.style.display = "none";
@@ -78,15 +73,36 @@ resetButton.addEventListener('click', () => {
         cell.textContent = "";
     });
     gameInstance = null;
-})
-
-newGameButton.addEventListener('click', () => {
-    messageContainer.textContent = "";
+    // remove EventListener from cells
     cells.forEach(cell => {
-        cell.textContent = "";
+        cell.removeEventListener('click', cellClickHandler);
     });
 })
 
+newGameButton.addEventListener('click', () => {
+    // Den Store des Spielstatus zurücksetzen (neues Spiel instanziieren)
+    const playerOne = document.querySelector('#name1').value;
+    const playerTwo = document.querySelector('#name2').value;
+    gameInstance = game(playerOne, playerTwo);
+    // Den Spielstatus in dem UI aktualisieren
+    document.querySelector('#messageContainer p').textContent = `Your turn ${gameInstance.nameOfCurrentPlayer()}`;
+    // Jede Zelle leeren
+    cells.forEach(cell => {
+        cell.textContent = "";
+    });
+    // Event-Listener zu jeder Zelle hinzufügen
+    cells.forEach(cell => {
+        cell.addEventListener('click', cellClickHandler);
+    });
+    // Den "New Game"-Button verstecken und den Reset-Button wieder anzeigen
+    newGameButton.style.display = 'none';
+    resetButton.style.display = 'block';
+    // drop win message
+    if(winMessage) {
+        document.body.removeChild(winMessage);
+        winMessage = null;
+    }
+});
 
 
 
